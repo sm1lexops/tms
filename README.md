@@ -147,3 +147,139 @@ hashed_password = hash_password('my_secure_password')
 print(encrypted)
 print(hashed_password)
 ```
+
+## Input Validation
+
+### Python Password Validation
+
+# Python Regular Expression for Checking Password Requirements
+
+This document provides an example of using Python's `re` module to check if a password meets certain requirements.
+
+## Password Requirements
+
+1. At least 8 characters long
+2. Contains both uppercase and lowercase characters
+3. Contains at least one numerical digit
+4. Contains at least one special character (e.g., @, #, $, etc.)
+
+## Python Script
+
+```python
+import re
+
+def is_valid_password(password):
+    """
+    Validates the password based on the following criteria:
+    1. At least 8 characters long
+    2. Contains both uppercase and lowercase characters
+    3. Contains at least one numerical digit
+    4. Contains at least one special character
+    """
+    if len(password) < 8:
+        return False
+
+    if not re.search(r"[a-z]", password):
+        return False
+
+    if not re.search(r"[A-Z]", password):
+        return False
+
+    if not re.search(r"\d", password):
+        return False
+
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return False
+
+    return True
+
+# Example usage
+passwords = ["Password123!", "password", "PASSWORD123", "Pass123", "Pass@123", "P@ssw0rd"]
+
+for pwd in passwords:
+    if is_valid_password(pwd):
+        print(f"'{pwd}' is a valid password.")
+    else:
+        print(f"'{pwd}' is NOT a valid password.")
+```
+
+### Bash Script for Password Validation
+
+```sh
+#!/bin/bash
+
+function is_valid_password() {
+    local password=$1
+
+    # Check if the password is at least 8 characters long
+    if [[ ${#password} -lt 8 ]]; then
+        echo "Password must be at least 8 characters long."
+        return 1
+    fi
+
+    # Check if the password contains at least one lowercase letter
+    if ! [[ $password =~ [a-z] ]]; then
+        echo "Password must contain at least one lowercase letter."
+        return 1
+    fi
+
+    # Check if the password contains at least one uppercase letter
+    if ! [[ $password =~ [A-Z] ]]; then
+        echo "Password must contain at least one uppercase letter."
+        return 1
+    fi
+
+    # Check if the password contains at least one digit
+    if ! [[ $password =~ [0-9] ]]; then
+        echo "Password must contain at least one digit."
+        return 1
+    fi
+
+    # Check if the password contains at least one special character
+    if ! [[ $password =~ [\!\@\#\$\%\^\&\*\(\)\_\+\-\=\[\]\{\}\;\:\,\.\/\<\>\?\|] ]]; then
+        echo "Password must contain at least one special character."
+        return 1
+    fi
+
+    echo "Password is valid."
+    return 0
+}
+
+# Example usage
+passwords=("Password123!" "password" "PASSWORD123" "Pass123" "Pass@123" "P@ssw0rd")
+
+for pwd in "${passwords[@]}"; do
+    echo "Checking password: '$pwd'"
+    is_valid_password "$pwd"
+    echo
+done
+```
+
+### Проверка формата телефонных номеров
+
+```sh
+#!/bin/bash
+
+# Function to validate phone numbers
+validate_phone_number() {
+    local phone_number=$1
+    local pattern1="^80(25|29|33|44)[0-9]{7}$"
+    local pattern2="^375(25|29|33|44)[0-9]{7}$"
+
+    if [[ $phone_number =~ $pattern1 ]]; then
+        echo "$phone_number is valid (format: 80(25/29/33/44)xxxxxxx)"
+    elif [[ $phone_number =~ $pattern2 ]]; then
+        echo "$phone_number is valid (format: 375(25/29/33/44)xxxxxxx)"
+    else
+        echo "$phone_number is NOT valid"
+    fi
+}
+
+# File containing phone numbers
+file_path="phone_numbers.txt"  # Replace with your file path
+
+# Read the file line by line and validate each phone number
+while IFS= read -r line; do
+    validate_phone_number "$line"
+done < "$file_path"
+```
